@@ -1,26 +1,54 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Route, Routes } from "react-router-dom";
+import { privateRouter, publicRouter } from "./routes";
+import { IRouters } from "./interfaces/router";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const handleMapChildren = (routes: IRouters[]) => {
+        return routes.map((route, ix) => {
+            return handleLayout(route, ix);
+        });
+    };
+
+    const handleLayout = (route: IRouters, key: any) => {
+        const Element = route.element;
+        const Layout = route.layout;
+        const Protected = route.Protected;
+
+        const isLayout = !!Layout;
+
+        let rts;
+
+        if (!isLayout) {
+            rts = <Route key={key} path={route.path} element={<Element />} />;
+        } else {
+            rts = (
+                <Route key={key} path={route.path} element={<Layout />}>
+                    <Route path={route.path} element={<Element />} />
+                    {route.children && handleMapChildren(route.children)}
+                </Route>
+            );
+        }
+
+        return Protected ? (
+            <Route key={key} element={<Protected />}>
+                {rts}
+            </Route>
+        ) : (
+            rts
+        );
+    };
+
+    return (
+        <Routes>
+            {privateRouter.map((route, ix) => {
+                return handleLayout(route, ix);
+            })}
+
+            {publicRouter.map((route, ix) => {
+                return handleLayout(route, ix);
+            })}
+        </Routes>
+    );
 }
 
 export default App;
