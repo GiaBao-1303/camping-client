@@ -3,7 +3,11 @@ import { FormSignInData } from "../../types/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignInSchema } from "../../schemas";
 import { Form, FormField } from "../../components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { getUserByEmail } from "../../queries/user.query";
+import { IUser } from "../../interfaces";
+import { setSession } from "../../utility/cookie.utility";
 
 const SignIn = () => {
     const {
@@ -14,8 +18,33 @@ const SignIn = () => {
         resolver: zodResolver(SignInSchema),
     });
 
+    const [isEmailOrPassCorrect, setIsEmailOrPassCorrect] = useState(false);
+    const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
+
     const onSubmit = async (data: FormSignInData) => {
-        console.log("Data: ", data);
+        try {
+            setLoading(true);
+            isEmailOrPassCorrect && setIsEmailOrPassCorrect(false);
+
+            const res = await getUserByEmail("users", data.email);
+
+            if (!res || res.empty) return setIsEmailOrPassCorrect(true);
+
+            const userData = res.docs[0].data() as IUser;
+
+            if (userData.password !== data.password)
+                return setIsEmailOrPassCorrect(true);
+
+            setSession("_id", userData._id);
+
+            navigate("/");
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -24,6 +53,7 @@ const SignIn = () => {
                 background="https://res.cloudinary.com/dbtqtvo9l/image/upload/v1727258278/form-banner-signin-bg_mkaasv.jpg"
                 backgroundForm="https://res.cloudinary.com/dbtqtvo9l/image/upload/v1727258277/form-banner-signIn_uwyg8v.jpg"
                 onSubmit={handleSubmit(onSubmit)}
+                loading={loading}
             >
                 <h5
                     className="text-center mb-3 pb-3"
@@ -54,6 +84,13 @@ const SignIn = () => {
                         placeholder="Mật khẩu"
                     />
                 </div>
+                {isEmailOrPassCorrect && (
+                    <div className="form-outline mb-4">
+                        <span className="mt-2 d-block text-danger">
+                            Email hoặc mật khẩu không chính xác
+                        </span>
+                    </div>
+                )}
 
                 <div className="pt-1 mb-4">
                     <button

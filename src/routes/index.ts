@@ -1,15 +1,19 @@
 import { DefaultLayout } from "../layouts";
 import {
-    ManageOrder,
-    ManageUser,
+    ManageProduct,
     HomePage,
     NotFound,
     SignIn,
     SignUp,
+    Dashboard,
 } from "../pages";
-import AdminPage from "../pages/admin";
 import { IRouters } from "../interfaces/router";
-import PrivateRoutes from "./PrivateRoutes";
+import { RedirectIfLoggedIn } from "../components";
+import { Outlet } from "react-router-dom";
+import CartPage from "../pages/cart";
+import AdminLayout from "../layouts/AdminLayout";
+import { Fragment } from "react/jsx-runtime";
+import CreateProduct from "../pages/admin/createProduct";
 
 export const publicRouter: IRouters[] = [
     {
@@ -18,20 +22,32 @@ export const publicRouter: IRouters[] = [
         element: HomePage,
     },
     {
-        path: "/sign-in",
+        path: "",
         layout: null,
-        element: SignIn,
-        children: null,
+        element: Outlet,
+        Protected: RedirectIfLoggedIn,
+        children: [
+            {
+                path: "/sign-in",
+                layout: null,
+                element: SignIn,
+                children: null,
+            },
+            {
+                path: "/sign-up",
+                layout: null,
+                element: SignUp,
+                children: null,
+            },
+        ],
     },
     {
-        path: "/sign-up",
+        path: "/cart",
         layout: null,
-        element: SignUp,
+        element: CartPage,
         children: null,
     },
-    // anothor routes ...
 
-    // NotFound Page
     {
         path: "*",
         layout: null,
@@ -40,21 +56,39 @@ export const publicRouter: IRouters[] = [
 ];
 
 export const privateRouter: IRouters[] = [
-    // /admin/orders
-    // /admin/users
     {
-        path: "/admin",
-        layout: DefaultLayout,
-        element: AdminPage,
-        Protected: PrivateRoutes,
+        path: "admin",
+        layout: AdminLayout,
+        element: Outlet,
         children: [
             {
-                path: "orders",
-                element: ManageOrder,
+                path: "",
+                element: Dashboard,
             },
             {
+                path: "products",
+                element: ManageProduct,
+            },
+            {
+                path: "products/create",
+                element: CreateProduct,
+            },
+
+            {
                 path: "users",
-                element: ManageUser,
+                element: Fragment,
+            },
+            {
+                path: "orders",
+                element: Fragment,
+            },
+            {
+                path: "reports",
+                element: Fragment,
+            },
+            {
+                path: "settings",
+                element: Fragment,
             },
         ],
     },

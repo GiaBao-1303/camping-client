@@ -5,6 +5,7 @@ interface IForm {
     onSubmit: any;
     background: string;
     backgroundForm: string;
+    loading: boolean;
 }
 
 const Form = (props: IForm) => {
@@ -40,8 +41,32 @@ const Form = (props: IForm) => {
                                 </div>
                                 <div className="col-md-6 col-lg-7 d-flex align-items-center">
                                     <div className="card-body p-4 p-lg-5 text-black">
-                                        <form onSubmit={onSubmit}>
-                                            {children}
+                                        <form
+                                            className="position-relative"
+                                            onSubmit={onSubmit}
+                                        >
+                                            {props.loading && (
+                                                <div
+                                                    style={{
+                                                        left: "50%",
+                                                    }}
+                                                    className="position-absolute top-50 translate-middle"
+                                                >
+                                                    <div
+                                                        className="spinner-border"
+                                                        role="status"
+                                                    ></div>
+                                                </div>
+                                            )}
+                                            <div
+                                                className={`${
+                                                    props.loading
+                                                        ? "opacity-50"
+                                                        : ""
+                                                }`}
+                                            >
+                                                {children}
+                                            </div>
                                         </form>
                                     </div>
                                 </div>

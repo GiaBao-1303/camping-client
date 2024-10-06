@@ -1,4 +1,4 @@
-import { FieldError, FieldValues, UseFormRegister } from "react-hook-form";
+import { FieldError, UseFormRegister } from "react-hook-form";
 
 export type FormSignUpData = {
     name: string;
@@ -15,10 +15,12 @@ export type FormSignInData = {
 export type FormFieldProps = {
     type: string;
     placeholder?: string;
-    name: ValidFieldNamesSignIn | ValidFieldNamesSignUp;
+    name: FormFieldNames;
     register: UseFormRegister<T>;
     error: FieldError | undefined;
 };
+
+type FormFieldNames = ValidFieldNamesSignIn | ValidFieldNamesSignUp;
 
 export type ValidFieldNamesSignIn = "email" | "password";
 
@@ -27,3 +29,16 @@ export type ValidFieldNamesSignUp =
     | "email"
     | "password"
     | "passwordConfirm";
+
+export type ValidFieldNameProduct =
+    | "productImageFiles"
+    | "video"
+    | "name"
+    | "category"
+    | "description"
+    | "productType"
+    | "length"
+    | "totalQuantity"
+    | "from"
+    | "offers"
+    | "address";

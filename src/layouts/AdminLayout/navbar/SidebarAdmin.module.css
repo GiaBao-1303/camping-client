@@ -1,0 +1,16 @@
+.sidebar {
+    height: 100vh;
+    background: linear-gradient(to right, #fa5130 0%, #fa5130 100%);
+    padding: 20px;
+}
+.sidebar a {
+    color: #fff;
+    margin-bottom: 15px;
+    display: block;
+    transition: background-color 0.3s, padding 0.3s;
+    padding: 10px 15px;
+    border-radius: 9999px;
+}
+.sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.5);
+}

@@ -1,0 +1,18 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to right, #fa5130 0%, #fa5130 100%);
+    padding: 10px 22px;
+    border-radius: 9999px;
+    color: white;
+}
+
+.btn-custom {
+    border: 2px solid white !important;
+    color: white !important;
+}
+
+.btn-custom:hover {
+    opacity: 0.85;
+}

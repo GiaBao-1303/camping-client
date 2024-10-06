@@ -1,11 +1,11 @@
 import * as z from "zod";
 
 const SignInSchema = z.object({
-    email: z.string().email().min(1, {
-        message: "email is required",
+    email: z.string().email({
+        message: "Vui lòng điền một email hợp lệ",
     }),
     password: z.string().min(1, {
-        message: "password is required",
+        message: "Vui lòng điền mật khẩu",
     }),
 });
 

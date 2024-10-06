@@ -1,0 +1,13 @@
+.btn-custom {
+    background: linear-gradient(to right, #fa5130 0%, #fa5130 100%);
+}
+
+.btn-custom i {
+    margin-right: 6px;
+}
+
+.grid-container {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 25% 1fr;
+}

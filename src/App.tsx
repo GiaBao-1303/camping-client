@@ -19,7 +19,11 @@ function App() {
         let rts;
 
         if (!isLayout) {
-            rts = <Route key={key} path={route.path} element={<Element />} />;
+            rts = (
+                <Route key={key} path={route.path} element={<Element />}>
+                    {route.children && handleMapChildren(route.children)}
+                </Route>
+            );
         } else {
             rts = (
                 <Route key={key} path={route.path} element={<Layout />}>
@@ -30,7 +34,7 @@ function App() {
         }
 
         return Protected ? (
-            <Route key={key} element={<Protected />}>
+            <Route path={route.path} key={key} element={<Protected />}>
                 {rts}
             </Route>
         ) : (

@@ -1,0 +1,28 @@
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #ee4d2d;
+    margin: 0 12px;
+    position: relative;
+}
+
+.custom-checkbox::before {
+    border-bottom: 2px solid #fff;
+    border-left: 2px solid #fff;
+    content: "";
+    height: 6px;
+    left: 5px;
+    position: absolute;
+    top: 5px;
+    transform: rotate(-45deg);
+    width: 9px;
+}
+
+.check:checked + .custom-checkbox {
+    background-color: #ee4d2d;
+}

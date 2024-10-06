@@ -4,10 +4,20 @@ import { FormFieldProps } from "../../types/form";
 interface IFormFieldProps extends FormFieldProps {
     className?: string;
     id?: string;
+    disabled?: boolean;
 }
 
 const FormField = (props: IFormFieldProps) => {
-    const { placeholder, name, type, error, register, className, id } = props;
+    const {
+        placeholder,
+        name,
+        type,
+        error,
+        register,
+        className,
+        id,
+        disabled,
+    } = props;
 
     return (
         <>
@@ -16,6 +26,7 @@ const FormField = (props: IFormFieldProps) => {
                 type={type}
                 placeholder={placeholder}
                 {...register(name)}
+                disabled={disabled}
                 className={className}
             />
             {error && (

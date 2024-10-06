@@ -6,6 +6,8 @@ import SignIn from "./signIn";
 import SignUp from "./signUp";
 import LoadingPage from "./loading";
 
+export * from "./admin";
+
 export {
     HomePage,
     NotFound,
