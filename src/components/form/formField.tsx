@@ -5,6 +5,8 @@ interface IFormFieldProps extends FormFieldProps {
     className?: string;
     id?: string;
     disabled?: boolean;
+    attrs?: Record<string, any>;
+    onChange?: any | null;
 }
 
 const FormField = (props: IFormFieldProps) => {
@@ -28,6 +30,11 @@ const FormField = (props: IFormFieldProps) => {
                 {...register(name)}
                 disabled={disabled}
                 className={className}
+                {...props.attrs}
+                onChange={(e) => {
+                    if (props.onChange) props.onChange(e);
+                    register(name).onChange(e);
+                }}
             />
             {error && (
                 <span className="mt-2 d-block text-danger">

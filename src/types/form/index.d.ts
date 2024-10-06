@@ -7,6 +7,34 @@ export type FormSignUpData = {
     passwordConfirm: string;
 };
 
+type ProductType = {
+    name: string;
+    price: number;
+    quantity: number;
+};
+
+export type CreateProductData = {
+    productImageFiles: FileList;
+    video: File;
+    name: string;
+    category: string;
+    description: string;
+    length: {
+        value: number;
+        unit: string;
+    };
+    from: string;
+    offers: Array<{
+        price_from: number;
+        price_to: number;
+        value: number;
+    }>;
+    address: string;
+    weight: string;
+    brand: string;
+    productType: Array<ProductType>;
+};
+
 export type FormSignInData = {
     email: string;
     password: string;
@@ -15,30 +43,32 @@ export type FormSignInData = {
 export type FormFieldProps = {
     type: string;
     placeholder?: string;
-    name: FormFieldNames;
+    name: string;
     register: UseFormRegister<T>;
     error: FieldError | undefined;
 };
 
-type FormFieldNames = ValidFieldNamesSignIn | ValidFieldNamesSignUp;
+// type FormFieldNames =
+//     | ValidFieldNamesSignIn
+//     | ValidFieldNamesSignUp
+//     | ValidFieldNameProduct;
 
-export type ValidFieldNamesSignIn = "email" | "password";
+// export type ValidFieldNamesSignIn = "email" | "password";
 
-export type ValidFieldNamesSignUp =
-    | "name"
-    | "email"
-    | "password"
-    | "passwordConfirm";
+// export type ValidFieldNamesSignUp =
+//     | "name"
+//     | "email"
+//     | "password"
+//     | "passwordConfirm";
 
-export type ValidFieldNameProduct =
-    | "productImageFiles"
-    | "video"
-    | "name"
-    | "category"
-    | "description"
-    | "productType"
-    | "length"
-    | "totalQuantity"
-    | "from"
-    | "offers"
-    | "address";
+// export type ValidFieldNameProduct =
+//     | "productImageFiles"
+//     | "video"
+//     | "name"
+//     | "category"
+//     | "description"
+//     | "productType"
+//     | "length"
+//     | "from"
+//     | "offers"
+//     | "weight"

@@ -8,7 +8,13 @@ const AdminLayout = () => {
             <AdminHeader />
             <div className="d-flex">
                 <SidebarAdmin />
-                <div className="flex-grow-1 p-4">
+                <div
+                    style={{
+                        overflow: "auto",
+                        height: "calc(100vh - 61px)",
+                    }}
+                    className="flex-grow-1 p-4"
+                >
                     <Outlet />
                 </div>
             </div>

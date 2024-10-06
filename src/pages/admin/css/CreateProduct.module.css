@@ -11,3 +11,36 @@
     display: grid;
     grid-template-columns: 25% 1fr;
 }
+
+.custom-input-file {
+    user-select: none;
+    cursor: pointer;
+    width: 85px;
+    height: 85px;
+    padding: 5px;
+    border: 2px dashed #fa5130;
+    color: #fa5130;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 12px;
+}
+
+.grid-container input[type="text"]:focus,
+.grid-container select:focus,
+.grid-container textarea:focus {
+    border-color: #fa5130 !important;
+    box-shadow: none !important;
+    outline: #fa5130 !important;
+}
+
+.custom-input-file i {
+    font-size: 25px;
+}
+
+.productTypes {
+    padding: 20px;
+}
+
+.productTypes + .productTypes {
+    margin-top: 25px;
+}
