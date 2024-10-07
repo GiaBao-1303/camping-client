@@ -15,7 +15,7 @@ type ProductType = {
 
 export type CreateProductData = {
     productImageFiles: FileList;
-    video: File;
+    video: FileList;
     name: string;
     category: string;
     description: string;
@@ -24,7 +24,7 @@ export type CreateProductData = {
         unit: string;
     };
     from: string;
-    offers: Array<{
+    offers?: Array<{
         price_from: number;
         price_to: number;
         value: number;

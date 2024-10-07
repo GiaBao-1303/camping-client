@@ -1,6 +1,11 @@
+import axios, { AxiosProgressEvent } from "axios";
 import { v4 as genuid } from "uuid";
 
-export const FileUpload = async (file: File, folder?: string) => {
+export const FileUpload = async (
+    file: File,
+    folder?: string,
+    callback?: (progressEvent: AxiosProgressEvent) => void
+) => {
     try {
         const upload_preset = process.env.REACT_APP_CLOUDINARY_PRESET_NAME;
         if (!upload_preset) throw new Error("upload_present not available");
@@ -15,21 +20,20 @@ export const FileUpload = async (file: File, folder?: string) => {
         formData.append("upload_preset", upload_preset);
         formData.append("public_id", publicId);
 
-        if (folder) {
+        if (file.type.startsWith("video/")) {
+            formData.append("folder", "shop-Camping/productVideos");
+        } else if (folder) {
             formData.append("folder", `shop-Camping/${folder}`);
         }
-
-        const res = await fetch(
+        const res = await axios.post(
             `https://api.cloudinary.com/v1_1/${cloud_name}/auto/upload`,
+            formData,
             {
-                method: "POST",
-                body: formData,
+                onUploadProgress: callback,
             }
         );
 
-        const data = await res.json();
-
-        const fileUrl = data.secure_url || data.url;
+        const fileUrl = res.data.secure_url || res.data.url;
 
         return {
             url: fileUrl,

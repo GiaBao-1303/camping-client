@@ -44,3 +44,27 @@
 .productTypes + .productTypes {
     margin-top: 25px;
 }
+
+.modal-custom {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.custom-progress {
+    user-select: none;
+    padding: 20px;
+    position: fixed;
+    background-color: white;
+    max-width: 500px;
+    width: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.custom-progress h5 {
+    margin-bottom: 20px;
+}

@@ -6,6 +6,7 @@ import {
     SignIn,
     SignUp,
     Dashboard,
+    ManageUser,
 } from "../pages";
 import { IRouters } from "../interfaces/router";
 import { RedirectIfLoggedIn } from "../components";
@@ -76,7 +77,7 @@ export const privateRouter: IRouters[] = [
 
             {
                 path: "users",
-                element: Fragment,
+                element: ManageUser,
             },
             {
                 path: "orders",

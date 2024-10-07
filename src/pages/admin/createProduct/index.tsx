@@ -1,12 +1,13 @@
 import classNames from "classnames/bind";
 import styles from "../css/CreateProduct.module.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormField from "../../../components/form/formField";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateProductData } from "../../../types/form";
 import { CreateProductSchema } from "../../../schemas/product.shema";
-import { ChangeEvent, FormEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
+import { CreateProductDb } from "../../../queries";
 
 const cl = classNames.bind(styles);
 
@@ -18,14 +19,26 @@ const CreateProduct = () => {
     } = useForm<CreateProductData>({
         resolver: zodResolver(CreateProductSchema),
     });
+
+    const navigate = useNavigate();
+
+    const [loading, setLoading] = useState(false);
     const [imageCount, setImageCount] = useState<number>(0);
     const [videoCount, setVideoCount] = useState<number>(0);
 
     const [productTypes, setProductTypes] = useState<Array<number>>([0]);
     const [offers, setOffers] = useState<Array<number>>([]);
 
-    const handleSubmitForm = (data: any) => {
-        console.log(data);
+    const handleSubmitForm = async (data: CreateProductData) => {
+        try {
+            setLoading(true);
+            await CreateProductDb(data, (progress) => {});
+            navigate("/admin/products");
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handleChangeImage = useCallback(
@@ -52,6 +65,23 @@ const CreateProduct = () => {
 
     return (
         <div>
+            <div className={cl("modal-custom")}>
+                <div className={cl("custom-progress")}>
+                    <h5 className="text-center">
+                        Đang tải ảnh và tạo sản phẩm. Vui long không hủy bỏ quá
+                        trình này
+                    </h5>
+                    <div className={cl("progress")}>
+                        <div
+                            className="progress-bar"
+                            role="progressbar"
+                            aria-valuenow={0}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                        ></div>
+                    </div>
+                </div>
+            </div>
             <div className="d-flex justify-content-end">
                 <Link
                     to="/admin/products"
@@ -296,19 +326,19 @@ const CreateProduct = () => {
                                             <div>
                                                 <input
                                                     {...register(
-                                                        `productType.${elem}.name`
+                                                        `productType.${ix}.name`
                                                     )}
                                                     type="text"
                                                     placeholder="Tên loại"
                                                     className="form-control"
                                                 />
-                                                {errors.productType?.[elem]
+                                                {errors.productType?.[ix]
                                                     ?.name && (
                                                     <span className="mt-2 d-block text-danger">
                                                         {
                                                             errors
                                                                 .productType?.[
-                                                                elem
+                                                                ix
                                                             ]?.name?.message
                                                         }
                                                     </span>
@@ -318,19 +348,19 @@ const CreateProduct = () => {
                                             <div className="my-4">
                                                 <input
                                                     {...register(
-                                                        `productType.${elem}.price`
+                                                        `productType.${ix}.price`
                                                     )}
                                                     type="number"
                                                     placeholder="Giá"
                                                     className="form-control"
                                                 />
-                                                {errors.productType?.[elem]
+                                                {errors.productType?.[ix]
                                                     ?.price && (
                                                     <span className="mt-2 d-block text-danger">
                                                         {
                                                             errors
                                                                 .productType?.[
-                                                                elem
+                                                                ix
                                                             ]?.price?.message
                                                         }
                                                     </span>
@@ -340,19 +370,19 @@ const CreateProduct = () => {
                                             <div>
                                                 <input
                                                     {...register(
-                                                        `productType.${elem}.quantity`
+                                                        `productType.${ix}.quantity`
                                                     )}
                                                     type="number"
                                                     placeholder="Số lượng"
                                                     className="form-control"
                                                 />
-                                                {errors.productType?.[elem]
+                                                {errors.productType?.[ix]
                                                     ?.quantity && (
                                                     <span className="mt-2 d-block text-danger">
                                                         {
                                                             errors
                                                                 .productType?.[
-                                                                elem
+                                                                ix
                                                             ]?.quantity?.message
                                                         }
                                                     </span>
