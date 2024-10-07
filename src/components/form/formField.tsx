@@ -7,6 +7,7 @@ interface IFormFieldProps extends FormFieldProps {
     disabled?: boolean;
     attrs?: Record<string, any>;
     onChange?: any | null;
+    [key: string]: any;
 }
 
 const FormField = (props: IFormFieldProps) => {
@@ -19,11 +20,13 @@ const FormField = (props: IFormFieldProps) => {
         className,
         id,
         disabled,
+        ...rest
     } = props;
 
     return (
         <>
             <input
+                {...rest}
                 id={id}
                 type={type}
                 placeholder={placeholder}

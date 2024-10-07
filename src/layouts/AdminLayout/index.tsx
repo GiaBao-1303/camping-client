@@ -4,9 +4,21 @@ import SidebarAdmin from "./navbar";
 
 const AdminLayout = () => {
     return (
-        <div>
+        <div
+            style={{
+                overflow: "hidden",
+                boxSizing: "border-box",
+                width: "100%",
+                height: "100vh",
+            }}
+        >
             <AdminHeader />
-            <div className="d-flex">
+            <div
+                style={{
+                    display: "grid",
+                    gridTemplateColumns: "14% 1fr",
+                }}
+            >
                 <SidebarAdmin />
                 <div
                     style={{

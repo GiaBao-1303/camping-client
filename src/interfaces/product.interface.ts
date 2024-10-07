@@ -26,4 +26,9 @@ export interface IProduct {
         price: number;
         quantity: number;
     }>;
+    colors: Array<{
+        name: string;
+        _id: string;
+        url: string;
+    }>;
 }

@@ -32,6 +32,10 @@ export type CreateProductData = {
     address: string;
     weight: string;
     brand: string;
+    colors?: Array<{
+        name: string;
+        image: FileList;
+    }>;
     productType: Array<ProductType>;
 };
 

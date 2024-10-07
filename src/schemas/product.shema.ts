@@ -18,6 +18,7 @@ export const ACCEPTED_VIDEO_TYPES = ["video/mp4", "video/webm"];
 
 const fileValidate = z.any().refine(
     (value) => {
+        console.log(value);
         const isFileList = value instanceof FileList;
         if (!value || !isFileList || (isFileList && value.length === 0)) {
             return false;
@@ -171,4 +172,45 @@ export const CreateProductSchema = z.object({
     brand: z.string().min(1, {
         message: "Vui lòng chọn",
     }),
+    colors: z
+        .array(
+            z.object({
+                name: z.string().min(1, {
+                    message: "không để trống",
+                }),
+                image: fileValidate
+                    .refine(
+                        (files) => {
+                            if (!(files instanceof FileList)) return false;
+                            return files.length === 1;
+                        },
+                        {
+                            message: "Tối đa chỉ một ảnh",
+                        }
+                    )
+                    .refine(
+                        (files) => {
+                            if (!(files instanceof FileList)) return false;
+                            return ACCEPTED_IMAGE_TYPES.includes(
+                                files[0]?.type
+                            ); // Kiểm tra kiểu
+                        },
+                        {
+                            message: `Vui lòng chọn ảnh theo định dạng sau ${ACCEPTED_IMAGE_TYPES.join(
+                                ", "
+                            )}.`,
+                        }
+                    )
+                    .refine(
+                        (files) => {
+                            if (!(files instanceof FileList)) return false;
+                            return files[0]?.size < maxSizeImage * kb;
+                        },
+                        {
+                            message: `Ảnh quá lớn kích thước tối đa ${maxSizeImage}MB.`,
+                        }
+                    ),
+            })
+        )
+        .optional(),
 });

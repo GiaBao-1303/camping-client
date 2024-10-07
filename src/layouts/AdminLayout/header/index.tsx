@@ -15,17 +15,23 @@ const AdminHeader = () => {
                 />
             </div>
             <div className="d-flex align-items-center">
-                <button className={cl("admin-header", "text-white")}>
+                <button
+                    className={cl("admin-header", "text-white", "btn-custom")}
+                >
                     <i className="bi bi-bell"></i>
                     <span>Thông báo</span>
                 </button>
 
-                <button className={cl("admin-header", "text-white")}>
+                <button
+                    className={cl("admin-header", "text-white", "btn-custom")}
+                >
                     <i className="bi bi-globe"></i>
                     <span>Hỗ trợ</span>
                 </button>
 
-                <button className={cl("admin-header", "text-white")}>
+                <button
+                    className={cl("admin-header", "text-white", "btn-custom")}
+                >
                     <i className="bi bi-globe"></i>
                     <span>Tiếng việt</span>
                 </button>

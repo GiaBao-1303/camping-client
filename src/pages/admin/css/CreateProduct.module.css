@@ -1,5 +1,8 @@
 .btn-custom {
     background: linear-gradient(to right, #fa5130 0%, #fa5130 100%);
+    border: none;
+    outline: none;
+    color: white !important;
 }
 
 .btn-custom i {
@@ -51,6 +54,7 @@
     left: 0;
     right: 0;
     bottom: 0;
+    background: rgba(0, 0, 0, 0.35);
 }
 
 .custom-progress {
@@ -67,4 +71,14 @@
 
 .custom-progress h5 {
     margin-bottom: 20px;
+}
+
+.progress-custom {
+    position: relative;
+}
+
+.progress-custom .progress-text {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
 }

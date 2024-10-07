@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { CreateProductData } from "../../../types/form";
 import { CreateProductSchema } from "../../../schemas/product.shema";
-import { ChangeEvent, useCallback, useState } from "react";
+import React, { ChangeEvent, useCallback, useState } from "react";
 import { CreateProductDb } from "../../../queries";
 
 const cl = classNames.bind(styles);
@@ -23,16 +23,20 @@ const CreateProduct = () => {
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(false);
+    const [currentProgress, setCurrentProgress] = useState<number>(0);
     const [imageCount, setImageCount] = useState<number>(0);
     const [videoCount, setVideoCount] = useState<number>(0);
 
     const [productTypes, setProductTypes] = useState<Array<number>>([0]);
     const [offers, setOffers] = useState<Array<number>>([]);
+    const [colors, setColors] = useState<Array<{ fileCount: number }>>([]);
 
     const handleSubmitForm = async (data: CreateProductData) => {
         try {
             setLoading(true);
-            await CreateProductDb(data, (progress) => {});
+            await CreateProductDb(data, (progress) => {
+                setCurrentProgress(progress);
+            });
             navigate("/admin/products");
         } catch (err) {
             console.error(err);
@@ -63,25 +67,54 @@ const CreateProduct = () => {
         setOffers((prev) => [...prev, prev.length + 1]);
     };
 
+    const handleAddColors = () => {
+        setColors((prev) => [...prev, { fileCount: 0 }]);
+    };
+
+    const handleChangeProdColor = (
+        e: ChangeEvent<HTMLInputElement>,
+        index: number
+    ) => {
+        const files = e.currentTarget?.files;
+        if (files) {
+            setColors((prev) => {
+                const data = prev;
+                data[index].fileCount = files.length;
+                return [...data];
+            });
+        }
+    };
+
+    // console.log(colors);
+
     return (
-        <div>
-            <div className={cl("modal-custom")}>
-                <div className={cl("custom-progress")}>
-                    <h5 className="text-center">
-                        Đang tải ảnh và tạo sản phẩm. Vui long không hủy bỏ quá
-                        trình này
-                    </h5>
-                    <div className={cl("progress")}>
-                        <div
-                            className="progress-bar"
-                            role="progressbar"
-                            aria-valuenow={0}
-                            aria-valuemin={0}
-                            aria-valuemax={100}
-                        ></div>
+        <div className={cl("wrapper")}>
+            {loading && (
+                <div className={cl("modal-custom")}>
+                    <div className={cl("custom-progress")}>
+                        <h5 className="text-center">
+                            Đang tải ảnh và tạo sản phẩm. Vui long không hủy bỏ
+                            quá trình này
+                        </h5>
+                        <div className={cl("progress", "progress-custom")}>
+                            <div
+                                style={{
+                                    width: `${currentProgress}%`,
+                                    background: "#fa5130",
+                                }}
+                                className="progress-bar"
+                                role="progressbar"
+                                aria-valuenow={currentProgress}
+                                aria-valuemin={0}
+                                aria-valuemax={100}
+                            ></div>
+                            <span className={cl("fw-bold", "progress-text")}>
+                                {currentProgress}%
+                            </span>
+                        </div>
                     </div>
                 </div>
-            </div>
+            )}
             <div className="d-flex justify-content-end">
                 <Link
                     to="/admin/products"
@@ -397,7 +430,7 @@ const CreateProduct = () => {
                 </div>
 
                 {offers.length > 0 && (
-                    <>
+                    <React.Fragment>
                         <h4>Mã giảm giá</h4>
                         <div>
                             {offers.map((elem, ix) => {
@@ -465,7 +498,82 @@ const CreateProduct = () => {
                                 );
                             })}
                         </div>
-                    </>
+                    </React.Fragment>
+                )}
+
+                {colors.length > 0 && (
+                    <React.Fragment>
+                        <h4>Màu sắc</h4>
+                        <div>
+                            {colors.map((elem, ix) => {
+                                return (
+                                    <div
+                                        key={ix}
+                                        className={cl("grid-container")}
+                                    >
+                                        <div
+                                            style={{
+                                                marginTop: "20px",
+                                            }}
+                                        >
+                                            <div>Màu {ix + 1}</div>
+                                        </div>
+                                        <div className="d-flex align-items-center">
+                                            <div>
+                                                <label>
+                                                    Tên màu (Sản phẩm)
+                                                </label>
+
+                                                <FormField
+                                                    type="text"
+                                                    name={`colors.${ix}.name`}
+                                                    className="form-control"
+                                                    error={
+                                                        errors.colors?.[ix]
+                                                            ?.name
+                                                    }
+                                                    register={register}
+                                                />
+                                            </div>
+                                            <div className="mx-4">
+                                                <FormField
+                                                    type="file"
+                                                    name={`colors.[${ix}].image`}
+                                                    error={
+                                                        errors.colors?.[ix]
+                                                            ?.image
+                                                    }
+                                                    register={register}
+                                                    onChange={(
+                                                        e: React.ChangeEvent<HTMLInputElement>
+                                                    ) =>
+                                                        handleChangeProdColor(
+                                                            e,
+                                                            ix
+                                                        )
+                                                    }
+                                                    className="d-none"
+                                                    id={`colorImage-${ix}`}
+                                                />
+                                                <label
+                                                    className={cl(
+                                                        "custom-input-file"
+                                                    )}
+                                                    htmlFor={`colorImage-${ix}`}
+                                                >
+                                                    <i className="bi bi-file-earmark-plus"></i>
+                                                    <div>
+                                                        Thêm ảnh màu (
+                                                        {elem.fileCount} /1)
+                                                    </div>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
+                            })}
+                        </div>
+                    </React.Fragment>
                 )}
 
                 <div className="d-flex justify-content-between mt-4">
@@ -485,6 +593,15 @@ const CreateProduct = () => {
                         >
                             <i className="bi bi-gift"></i>
                             Tạo mã giảm giá
+                        </button>
+
+                        <button
+                            type="button"
+                            onClick={handleAddColors}
+                            className={cl("btn text-white", "btn-custom")}
+                        >
+                            <i className="bi bi-palette-fill"></i>
+                            Thêm màu cho sản phẩm
                         </button>
                     </div>
 

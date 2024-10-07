@@ -1,9 +1,10 @@
 import { v4 as genuid } from "uuid";
 import { db } from "../configs";
 import { CreateProductData } from "../types/form";
-import { doc, setDoc } from "firebase/firestore";
+import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
 import { FileUpload } from "../utility/cloudinary.utility";
 import { AxiosProgressEvent } from "axios";
+import { IProduct } from "../interfaces/product.interface";
 
 export const CreateProductDb = async (
     data: CreateProductData,
@@ -14,6 +15,9 @@ export const CreateProductDb = async (
 
         const promiseUploads = [];
         const productImageFiles = data.productImageFiles;
+        const colorsImageFiles = data.colors || [];
+        const totalFiles =
+            productImageFiles.length + colorsImageFiles.length + 1;
 
         let totalSize = data.video[0].size;
         let totalPressSize = 0;
@@ -22,11 +26,15 @@ export const CreateProductDb = async (
             totalSize += productImageFiles[i].size;
         }
 
+        for (let i = 0; i < colorsImageFiles.length; i++) {
+            totalSize += colorsImageFiles[i].image[0].size;
+        }
+
         const handleCalcProgress = (progress: AxiosProgressEvent) => {
-            totalPressSize += Math.round((progress.loaded / totalSize) * 100);
+            totalPressSize += progress.loaded;
 
             if (onProgress) {
-                onProgress(totalPressSize);
+                onProgress(Math.round(totalPressSize / totalSize));
             }
         };
 
@@ -35,6 +43,18 @@ export const CreateProductDb = async (
                 FileUpload(productImageFiles[i], "productImage", (progress) => {
                     handleCalcProgress(progress);
                 })
+            );
+        }
+
+        for (let i = 0; i < colorsImageFiles.length; i++) {
+            promiseUploads.push(
+                FileUpload(
+                    colorsImageFiles[i].image[0],
+                    "productImage",
+                    (progress) => {
+                        handleCalcProgress(progress);
+                    }
+                )
             );
         }
 
@@ -52,17 +72,29 @@ export const CreateProductDb = async (
 
         const uploadeds = await Promise.all(promiseUploads);
 
-        console.log("Uploadeds: ", uploadeds);
-
-        const images = uploadeds.slice(0, uploadeds.length - 1);
+        const images = uploadeds.slice(0, productImageFiles.length);
+        const imageColors = uploadeds.slice(
+            productImageFiles.length,
+            productImageFiles.length + colorsImageFiles.length
+        );
         const video = uploadeds[uploadeds.length - 1];
 
-        if (uploadeds.length === productImageFiles.length + 1) {
+        const colors = data.colors?.map((color, ix) => {
+            return {
+                name: color.name,
+                _id: imageColors[ix]?._id,
+                url: imageColors[ix]?.url,
+            };
+        });
+
+        if (uploadeds.length === totalFiles) {
             const docData = {
                 _id,
                 ...data,
                 productImageFiles: images,
+                colors,
                 video,
+                createdAt: Date.now(),
             };
 
             const docRef = doc(db, "products", _id);
@@ -72,5 +104,18 @@ export const CreateProductDb = async (
         }
     } catch (error) {
         console.error(error);
+    }
+};
+
+export const getAllProduct = async () => {
+    try {
+        const q = query(collection(db, "products"));
+        const querySnapshot = await getDocs(q);
+        const docs = querySnapshot.docs.map((doc) => {
+            return doc.data() as IProduct;
+        });
+        return docs;
+    } catch (err) {
+        console.error(err);
     }
 };
