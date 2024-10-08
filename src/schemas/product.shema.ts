@@ -18,7 +18,6 @@ export const ACCEPTED_VIDEO_TYPES = ["video/mp4", "video/webm"];
 
 const fileValidate = z.any().refine(
     (value) => {
-        console.log(value);
         const isFileList = value instanceof FileList;
         if (!value || !isFileList || (isFileList && value.length === 0)) {
             return false;

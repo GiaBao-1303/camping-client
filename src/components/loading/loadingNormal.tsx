@@ -1,4 +1,8 @@
-const LoadingNormal = () => {
+interface ILoadingNormalProps {
+    colors: "primary" | "secondary";
+}
+
+const LoadingNormal = (props: ILoadingNormalProps) => {
     return (
         <div
             style={{
@@ -6,7 +10,14 @@ const LoadingNormal = () => {
             }}
             className="position-absolute top-50 translate-middle"
         >
-            <div className="spinner-border" role="status"></div>
+            <div
+                style={{
+                    borderColor: `${props.colors === "primary" && "#fa5130"}`,
+                    borderRightColor: "wheat",
+                }}
+                className="spinner-border"
+                role="status"
+            ></div>
         </div>
     );
 };

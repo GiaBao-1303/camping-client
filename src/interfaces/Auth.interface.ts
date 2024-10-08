@@ -6,6 +6,7 @@ export interface IUser {
     role: string;
     carts: Array<string>;
     orders: Array<string>;
+    imageUrl: string;
     createdAt: any;
     updatedAt: any;
 }

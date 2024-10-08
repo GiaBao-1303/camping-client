@@ -44,6 +44,8 @@ const SignUp = () => {
                 carts: [],
                 orders: [],
                 role: "user",
+                imageUrl:
+                    "https://res.cloudinary.com/dbtqtvo9l/image/upload/v1727921331/avatar_bmzsam.webp",
                 createdAt: serverTimestamp(),
                 updatedAt: serverTimestamp(),
             };

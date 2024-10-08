@@ -85,8 +85,6 @@ const CreateProduct = () => {
         }
     };
 
-    // console.log(colors);
-
     return (
         <div className={cl("wrapper")}>
             {loading && (

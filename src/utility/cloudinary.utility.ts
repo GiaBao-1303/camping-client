@@ -1,5 +1,6 @@
 import axios, { AxiosProgressEvent } from "axios";
 import { v4 as genuid } from "uuid";
+import cloudinary from "../configs/cloudinary.config";
 
 export const FileUpload = async (
     file: File,
@@ -44,21 +45,20 @@ export const FileUpload = async (
     }
 };
 
-export const FileDelete = async (_id: string) => {
+export const FileDelete = async (
+    file: { _id: string; url: string },
+    prefix?: string
+) => {
     try {
-        const cloud_name = process.env.REACT_APP_CLOUDINARY_NAME;
-        const apiKey = process.env.REACT_APP_CLOUDINARY_API_KEY;
+        const resourceType = file.url.endsWith(".mp4") ? "video" : "image";
 
-        await fetch(`https://api.cloudinary.com/v1_1/${cloud_name}/destroy`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                public_id: _id,
-                api_key: apiKey,
-            }),
-        });
+        const res = await cloudinary.v2.uploader.destroy(
+            `shop-Camping/${prefix}/${file._id}`,
+            {
+                resource_type: resourceType,
+            }
+        );
+        console.log(res.result);
     } catch (error) {
         console.error("Delete failed:", error);
     }

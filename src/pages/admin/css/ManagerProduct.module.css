@@ -22,3 +22,21 @@
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.position-loading {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 62px - 48px - 20px - 1.5rem);
+}
+
+.custom-loading-remove {
+    max-width: 250px;
+    width: 100%;
+    background-color: #ebebeb;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+}

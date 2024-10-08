@@ -1,8 +1,16 @@
 import { v4 as genuid } from "uuid";
 import { db } from "../configs";
 import { CreateProductData } from "../types/form";
-import { collection, doc, getDocs, query, setDoc } from "firebase/firestore";
-import { FileUpload } from "../utility/cloudinary.utility";
+import {
+    collection,
+    deleteDoc,
+    doc,
+    getDocs,
+    query,
+    setDoc,
+    where,
+} from "firebase/firestore";
+import { FileDelete, FileUpload } from "../utility/cloudinary.utility";
 import { AxiosProgressEvent } from "axios";
 import { IProduct } from "../interfaces/product.interface";
 
@@ -79,13 +87,14 @@ export const CreateProductDb = async (
         );
         const video = uploadeds[uploadeds.length - 1];
 
-        const colors = data.colors?.map((color, ix) => {
-            return {
-                name: color.name,
-                _id: imageColors[ix]?._id,
-                url: imageColors[ix]?.url,
-            };
-        });
+        const colors =
+            data.colors?.map((color, ix) => {
+                return {
+                    name: color.name,
+                    _id: imageColors[ix]?._id,
+                    url: imageColors[ix]?.url,
+                };
+            }) || [];
 
         if (uploadeds.length === totalFiles) {
             const docData = {
@@ -115,6 +124,39 @@ export const getAllProduct = async () => {
             return doc.data() as IProduct;
         });
         return docs;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+export const getProductById = async (_id: string) => {
+    try {
+        const q = query(collection(db, "products"), where("_id", "==", _id));
+        const querySnapshot = await getDocs(q);
+        const docs = querySnapshot.docs[0].data() as IProduct;
+        return docs;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+export const removeProductById = async (_id: string) => {
+    try {
+        const product = await getProductById(_id);
+        if (product) {
+            const files = [
+                ...product.productImageFiles,
+                ...(product.colors || []),
+            ];
+
+            await Promise.all([
+                ...files.map((file) => FileDelete(file, "productImage")),
+                FileDelete(product.video, "productVideos"),
+            ]);
+
+            const docRef = doc(db, "products", product._id);
+            await deleteDoc(docRef);
+        }
     } catch (err) {
         console.error(err);
     }
