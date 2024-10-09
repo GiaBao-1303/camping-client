@@ -16,30 +16,29 @@ function App() {
 
         const isLayout = !!Layout;
 
-        let rts;
-
-        if (!isLayout) {
-            rts = (
-                <Route key={key} path={route.path} element={<Element />}>
+        if (isLayout && Protected) {
+            return (
+                <Route key={key} path={route.path} element={<Protected />}>
+                    <Route element={<Layout />}>
+                        <Route index path={route.path} element={<Element />} />
+                        {route.children && handleMapChildren(route.children)}
+                    </Route>
+                </Route>
+            );
+        } else if (isLayout) {
+            return (
+                <Route key={key} path={route.path} element={<Layout />}>
+                    <Route element={<Element />} />
                     {route.children && handleMapChildren(route.children)}
                 </Route>
             );
         } else {
-            rts = (
-                <Route key={key} path={route.path} element={<Layout />}>
-                    <Route path={route.path} element={<Element />} />
+            return (
+                <Route key={key} path={route.path} element={<Element />}>
                     {route.children && handleMapChildren(route.children)}
                 </Route>
             );
         }
-
-        return Protected ? (
-            <Route path={route.path} key={key} element={<Protected />}>
-                {rts}
-            </Route>
-        ) : (
-            rts
-        );
     };
 
     return (

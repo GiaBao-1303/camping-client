@@ -16,6 +16,8 @@ import AdminLayout from "../layouts/AdminLayout";
 import { Fragment } from "react/jsx-runtime";
 import CreateProduct from "../pages/admin/createProduct";
 import EditProduct from "../pages/admin/editProduct";
+import RequireAuth from "../components/auth/RequireAuth";
+import RequireAdmin from "../components/auth/RequireAdmin";
 
 export const publicRouter: IRouters[] = [
     {
@@ -46,6 +48,7 @@ export const publicRouter: IRouters[] = [
     {
         path: "/cart",
         layout: null,
+        Protected: RequireAuth,
         element: CartPage,
         children: null,
     },
@@ -61,6 +64,7 @@ export const privateRouter: IRouters[] = [
     {
         path: "admin",
         layout: AdminLayout,
+        Protected: RequireAdmin,
         element: Outlet,
         children: [
             {

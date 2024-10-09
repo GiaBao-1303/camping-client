@@ -27,6 +27,8 @@ const CartPage = () => {
             .finally(() => setLoading(false));
     }, []);
 
+    console.log(user);
+
     return (
         <div
             style={{

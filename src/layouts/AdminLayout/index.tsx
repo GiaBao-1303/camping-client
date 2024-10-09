@@ -3,6 +3,7 @@ import AdminHeader from "./header";
 import SidebarAdmin from "./navbar";
 
 const AdminLayout = () => {
+    console.log("Rendering AdminLayout");
     return (
         <div
             style={{
