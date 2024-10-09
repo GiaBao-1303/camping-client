@@ -13,6 +13,21 @@ type ProductType = {
     quantity: number;
 };
 
+export type EditProductData = {
+    name: string;
+    category: string;
+    description: string;
+    length: {
+        value: number;
+        unit: string;
+    };
+    from: string;
+    address: string;
+    weight: string;
+    brand: string;
+    productType: Array<ProductType>;
+};
+
 export type CreateProductData = {
     productImageFiles: FileList;
     video: FileList;
@@ -51,28 +66,3 @@ export type FormFieldProps = {
     register: UseFormRegister<T>;
     error: FieldError | undefined;
 };
-
-// type FormFieldNames =
-//     | ValidFieldNamesSignIn
-//     | ValidFieldNamesSignUp
-//     | ValidFieldNameProduct;
-
-// export type ValidFieldNamesSignIn = "email" | "password";
-
-// export type ValidFieldNamesSignUp =
-//     | "name"
-//     | "email"
-//     | "password"
-//     | "passwordConfirm";
-
-// export type ValidFieldNameProduct =
-//     | "productImageFiles"
-//     | "video"
-//     | "name"
-//     | "category"
-//     | "description"
-//     | "productType"
-//     | "length"
-//     | "from"
-//     | "offers"
-//     | "weight"

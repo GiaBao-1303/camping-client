@@ -18,6 +18,7 @@ const ManageProduct = () => {
         setLoading(true);
         getAllProduct()
             .then((res) => {
+                if (res) res.sort((a, b) => a.createdAt - b.createdAt);
                 setProducts(res || []);
             })
             .catch(console.error)
@@ -111,9 +112,12 @@ const ManageProduct = () => {
                                             "justify-content-center"
                                         )}
                                     >
-                                        <Button variant="warning" size="sm">
+                                        <Link
+                                            to={`${item._id}/edit`}
+                                            className="btn btn-warning"
+                                        >
                                             <i className="bi bi-pencil"></i> Sửa
-                                        </Button>
+                                        </Link>
                                         <Button
                                             className={cl("mx-4")}
                                             variant="danger"

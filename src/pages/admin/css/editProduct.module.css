@@ -1,0 +1,16 @@
+.grid-container {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    column-gap: 10px;
+}
+
+.form-group + .form-group {
+    margin-top: 10px;
+}
+
+.btn-custom {
+    background: linear-gradient(to right, #fa5130 0%, #fa5130 100%);
+    border: none;
+    outline: none;
+    color: white !important;
+}

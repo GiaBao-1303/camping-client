@@ -31,4 +31,5 @@ export interface IProduct {
         _id: string;
         url: string;
     }>;
+    createdAt: number;
 }

@@ -5,6 +5,7 @@ import ManageUser from "./admin/user";
 import SignIn from "./signIn";
 import SignUp from "./signUp";
 import LoadingPage from "./loading";
+import EditProduct from "./admin/editProduct";
 
 export * from "./admin";
 
@@ -16,4 +17,5 @@ export {
     SignIn,
     SignUp,
     LoadingPage,
+    EditProduct,
 };

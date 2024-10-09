@@ -15,6 +15,7 @@ import CartPage from "../pages/cart";
 import AdminLayout from "../layouts/AdminLayout";
 import { Fragment } from "react/jsx-runtime";
 import CreateProduct from "../pages/admin/createProduct";
+import EditProduct from "../pages/admin/editProduct";
 
 export const publicRouter: IRouters[] = [
     {
@@ -74,7 +75,10 @@ export const privateRouter: IRouters[] = [
                 path: "products/create",
                 element: CreateProduct,
             },
-
+            {
+                path: "products/:productId/edit",
+                element: EditProduct,
+            },
             {
                 path: "users",
                 element: ManageUser,

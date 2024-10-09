@@ -1,6 +1,6 @@
 import { v4 as genuid } from "uuid";
 import { db } from "../configs";
-import { CreateProductData } from "../types/form";
+import { CreateProductData, EditProductData } from "../types/form";
 import {
     collection,
     deleteDoc,
@@ -8,6 +8,7 @@ import {
     getDocs,
     query,
     setDoc,
+    updateDoc,
     where,
 } from "firebase/firestore";
 import { FileDelete, FileUpload } from "../utility/cloudinary.utility";
@@ -157,6 +158,15 @@ export const removeProductById = async (_id: string) => {
             const docRef = doc(db, "products", product._id);
             await deleteDoc(docRef);
         }
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+export const updateProduct = async (data: EditProductData, _id: string) => {
+    try {
+        const productRef = doc(db, "products", _id);
+        await updateDoc(productRef, data);
     } catch (err) {
         console.error(err);
     }

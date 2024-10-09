@@ -213,3 +213,45 @@ export const CreateProductSchema = z.object({
         )
         .optional(),
 });
+
+export const EditproductSchema = z.object({
+    name: z.string().min(1, "Tên sản phẩm là bắt buộc"),
+    description: z.string().min(100, {
+        message: "Ít nhất một trăm ký tự",
+    }),
+    weight: z.string().min(1, {
+        message: "không được để trống",
+    }),
+    category: z.string().min(1, {
+        message: "Không được để trống",
+    }),
+    from: z.string().min(1, {
+        message: "không được để trống",
+    }),
+    productType: z
+        .array(
+            z.object({
+                name: z.string().min(1, "Tên loại là bắt buộc"),
+                price: z.preprocess(
+                    (value) =>
+                        typeof value === "string" ? parseFloat(value) : value,
+                    z.number({ message: "Vui lòng điền đúng định dạng" })
+                ),
+                quantity: z.preprocess(
+                    (value) =>
+                        typeof value === "string" ? parseFloat(value) : value,
+                    z.number({ message: "Vui lòng điền đúng định dạng" })
+                ),
+            })
+        )
+        .nonempty("Phải có ít nhất một loại sản phẩm"),
+    length: z.object({
+        value: z.preprocess(
+            (value) => (typeof value === "string" ? parseFloat(value) : value),
+            z.number({ message: "Vui lòng điền đúng định dạng" })
+        ),
+        unit: z.enum(["cm", "m"], {
+            errorMap: () => ({ message: "Đơn vị phải là cm hoặc m" }),
+        }),
+    }),
+});
