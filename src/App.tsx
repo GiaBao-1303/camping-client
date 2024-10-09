@@ -4,8 +4,8 @@ import { IRouters } from "./interfaces/router";
 
 function App() {
     const handleMapChildren = (routes: IRouters[]) => {
-        return routes.map((route, ix) => {
-            return handleLayout(route, ix);
+        return routes.map((route, key) => {
+            return handleLayout(route, key);
         });
     };
 
@@ -20,7 +20,7 @@ function App() {
             return (
                 <Route key={key} path={route.path} element={<Protected />}>
                     <Route element={<Layout />}>
-                        <Route index path={route.path} element={<Element />} />
+                        <Route index element={<Element />} />
                         {route.children && handleMapChildren(route.children)}
                     </Route>
                 </Route>
@@ -28,7 +28,14 @@ function App() {
         } else if (isLayout) {
             return (
                 <Route key={key} path={route.path} element={<Layout />}>
-                    <Route element={<Element />} />
+                    <Route index element={<Element />} />
+                    {route.children && handleMapChildren(route.children)}
+                </Route>
+            );
+        } else if (Protected) {
+            return (
+                <Route key={key} path={route.path} element={<Protected />}>
+                    <Route index element={<Element />} />
                     {route.children && handleMapChildren(route.children)}
                 </Route>
             );
@@ -40,7 +47,6 @@ function App() {
             );
         }
     };
-
     return (
         <Routes>
             {privateRouter.map((route, ix) => {
